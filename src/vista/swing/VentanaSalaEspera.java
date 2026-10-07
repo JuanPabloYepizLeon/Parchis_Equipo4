@@ -58,8 +58,8 @@ public class VentanaSalaEspera extends javax.swing.JFrame implements VistaSalaEs
         habilitarIniciar(false);
         
         lblAyuda.setText(esAnfitrion
-                ? "Solo Anfitrión - se habilita cuando todos estén listos."
-                : "Espera a que el anfitrión inicie la partida.");
+                ? "Solo AnfitriÃ³n - se habilita cuando todos estÃ©n listos."
+                : "Espera a que el anfitriÃ³n inicie la partida.");
         
         if (!esAnfitrion) {
             panel.remove(fillerIniciar);
@@ -157,7 +157,7 @@ public class VentanaSalaEspera extends javax.swing.JFrame implements VistaSalaEs
         punto.setPreferredSize(new Dimension(14, 14));
         
         boolean esLocal = j.getNombre().equals(nombreLocal);
-        JLabel nombre = new JLabel(j.getNombre() + (esLocal ? " (Tú)" : ""));
+        JLabel nombre = new JLabel(j.getNombre() + (esLocal ? " (TÃº)" : ""));
         nombre.setFont(new Font("SansSerif", esLocal ? Font.BOLD : Font.PLAIN, 13));
         
         JPanel izquierda = new JPanel(new FlowLayout(FlowLayout.LEFT, 8, 14));

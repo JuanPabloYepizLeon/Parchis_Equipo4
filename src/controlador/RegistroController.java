@@ -31,7 +31,7 @@ public class RegistroController {
     public void registrarJugador(String txtNombre, Color txtColor, String txtAvatar) {
         try {
             if (txtNombre == null || txtNombre.isBlank()) {
-                throw new ValidacionException("nombre", "El nombre no puede estar vacÌo");
+                throw new ValidacionException("nombre", "El nombre no puede estar vac√≠o");
             }
             if (txtColor == null) {
                 throw new ValidacionException("color", "Elige un color");
@@ -40,7 +40,7 @@ public class RegistroController {
                 throw new ValidacionException("avatar", "Elige un avatar");
             }
             if (sesion.getPartida().coloresOcupados().contains(txtColor)) {
-                throw new ErrorNegocioException("Color ocupado", "Ese color ya est· ocupado. Elige otro.");
+                throw new ErrorNegocioException("Color ocupado", "Ese color ya est√° ocupado. Elige otro.");
             }
 
             Jugador jugador = new Jugador(txtNombre.trim(), txtColor, txtAvatar);

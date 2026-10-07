@@ -134,7 +134,7 @@ public class VentanaConfigurarPartida extends javax.swing.JFrame implements Vist
         panel.add(campoPuerto);
         panel.add(filler2);
 
-        campoMax.setEtiqueta("Máximo de jugadores (2-4)");
+        campoMax.setEtiqueta("MÃ¡ximo de jugadores (2-4)");
         panel.add(campoMax);
         panel.add(filler3);
 
