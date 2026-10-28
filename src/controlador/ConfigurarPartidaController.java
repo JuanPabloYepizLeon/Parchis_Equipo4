@@ -28,7 +28,7 @@ public class ConfigurarPartidaController {
                 throw new ValidacionException("puerto", "El puerto no puede estar vacío");
             }
             if (txtJugadores.isBlank()) {
-                throw new ValidacionException("jugadores", "La cantidad de jugadores no puede estar vacía");
+                throw new ValidacionException("maxJugadores", "La cantidad de jugadores no puede estar vacía");
             }
 
             int maxJugadores = parsear(txtJugadores, "Cantidad de jugadores no válida", "Ingresa un número entero entre 2 y 4.");
