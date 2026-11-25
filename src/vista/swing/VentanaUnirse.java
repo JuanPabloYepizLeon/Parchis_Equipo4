@@ -1,29 +1,20 @@
 package vista.swing;
 
 import controlador.SolicitarUnirseController;
-import java.awt.Color;
-import java.awt.Cursor;
-import java.awt.Dimension;
-import java.awt.Font;
-import javax.swing.BorderFactory;
-import javax.swing.Box;
-import javax.swing.BoxLayout;
-import javax.swing.JButton;
-import javax.swing.JDialog;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
 import vista.VistaUnirse;
 
+/**
+ * Ventana para unirse a una partida: dirección y puerto del servidor.
+ */
 public class VentanaUnirse extends javax.swing.JFrame implements VistaUnirse {
-
-    private static final Color AZUL_OSCURO = new Color(0x2F, 0x34, 0x4A);
 
     private SolicitarUnirseController controlador;
 
     public VentanaUnirse() {
         initComponents();
 
-        estilizarBoton(btnUnirse);
+        Estilos.primario(btnUnirse);
+        Estilos.anchoCompleto(btnUnirse, 300);
         btnUnirse.addActionListener(e -> unirse());
         getRootPane().setDefaultButton(btnUnirse);
 
@@ -60,48 +51,7 @@ public class VentanaUnirse extends javax.swing.JFrame implements VistaUnirse {
 
     @Override
     public void mostrarModal(String titulo, String mensaje) {
-        JDialog d = new JDialog(this, titulo, true);
-
-        JLabel lblTitulo = new JLabel(titulo);
-        lblTitulo.setFont(new Font("SansSerif", Font.BOLD, 14));
-        lblTitulo.setAlignmentX(LEFT_ALIGNMENT);
-
-        JLabel lblMensaje = new JLabel("<html><body style='width:240px'>" + mensaje + "</body></html>");
-        lblMensaje.setAlignmentX(LEFT_ALIGNMENT);
-
-        JButton aceptar = new JButton("Aceptar");
-        estilizarBoton(aceptar);
-        aceptar.addActionListener(e -> d.dispose());
-
-        JPanel p = new JPanel();
-        p.setLayout(new BoxLayout(p, BoxLayout.Y_AXIS));
-        p.setBackground(Color.WHITE);
-        p.setBorder(BorderFactory.createEmptyBorder(20, 24, 20, 24));
-        p.add(lblTitulo);
-        p.add(Box.createVerticalStrut(8));
-        p.add(lblMensaje);
-        p.add(Box.createVerticalStrut(16));
-        p.add(aceptar);
-
-        d.setContentPane(p);
-        d.getRootPane().setDefaultButton(aceptar);
-        d.setResizable(false);
-        d.pack();
-        d.setLocationRelativeTo(this);
-        d.setVisible(true);
-    }
-
-    private void estilizarBoton(JButton b) {
-        b.setAlignmentX(LEFT_ALIGNMENT);
-        b.setMaximumSize(new Dimension(Integer.MAX_VALUE, 40));
-        b.setPreferredSize(new Dimension(300, 40));
-        b.setBackground(AZUL_OSCURO);
-        b.setForeground(Color.WHITE);
-        b.setFont(new Font("SansSerif", Font.BOLD, 13));
-        b.setBorder(BorderFactory.createEmptyBorder());
-        b.setFocusPainted(false);
-        b.setOpaque(true);
-        b.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        Estilos.mostrarModal(this, titulo, mensaje);
     }
 
     @SuppressWarnings("unchecked")

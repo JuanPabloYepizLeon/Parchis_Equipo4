@@ -11,10 +11,10 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.border.Border;
 
+/**
+ * Campo de texto con etiqueta y mensaje de error debajo.
+ */
 public class Campo extends JPanel {
-
-    private static final Color ROJO = new Color(0xD3, 0x2F, 0x2F);
-    private static final Color GRIS_BORDE = new Color(0xCC, 0xCC, 0xCC);
 
     private final JLabel lblEtiqueta = new JLabel();
     private final JTextField txt = new JTextField();
@@ -32,7 +32,7 @@ public class Campo extends JPanel {
         txt.setPreferredSize(new Dimension(300, 32));
         txt.setMaximumSize(new Dimension(Integer.MAX_VALUE, 32));
 
-        lblError.setForeground(ROJO);
+        lblError.setForeground(Estilos.ROJO_ERROR);
         lblError.setFont(new Font("SansSerif", Font.PLAIN, 11));
         lblError.setAlignmentX(LEFT_ALIGNMENT);
 
@@ -42,11 +42,6 @@ public class Campo extends JPanel {
         add(Box.createVerticalStrut(2));
         add(lblError);
         limpiarError();
-    }
-
-    public Campo(String etiqueta) {
-        this();
-        setEtiqueta(etiqueta);
     }
 
     public String getEtiqueta() {
@@ -62,12 +57,12 @@ public class Campo extends JPanel {
     }
 
     public void error(String mensaje) {
-        txt.setBorder(borde(ROJO));
+        txt.setBorder(borde(Estilos.ROJO_ERROR));
         lblError.setText(mensaje);
     }
 
     public void limpiarError() {
-        txt.setBorder(borde(GRIS_BORDE));
+        txt.setBorder(borde(Estilos.GRIS_BORDE));
         lblError.setText(" ");
     }
 

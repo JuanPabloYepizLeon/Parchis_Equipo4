@@ -1,10 +1,10 @@
 package vista.swing;
 
+import cliente.PartidaVista.JugadorVista;
 import controlador.IniciarPartidaController;
 import controlador.SolicitudInicioController;
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
@@ -13,38 +13,36 @@ import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.util.List;
 import javax.swing.BorderFactory;
-import javax.swing.Box;
-import javax.swing.BoxLayout;
-import javax.swing.JButton;
 import javax.swing.JComponent;
-import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import modelo.EstadoJugador;
-import modelo.Jugador;
 import vista.VistaSalaEspera;
 
+/**
+ * Ventana de la sala de espera: lista de jugadores y botones de listo e iniciar.
+ */
 public class VentanaSalaEspera extends javax.swing.JFrame implements VistaSalaEspera {
-    
-    private static final Color AZUL_OSCURO = new Color(0x2F, 0x34, 0x4A);
-    private static final Color GRIS_BORDE = new Color(0xCC, 0xCC, 0xCC);
+
+    private static final int ANCHO = 340;
     private static final Color GRIS_CHIP = new Color(0xE5, 0xE7, 0xEB);
     private static final Color GRIS_DESHAB = new Color(0xD1, 0xD5, 0xDB);
     private static final Color VERDE_FONDO = new Color(0xD1, 0xFA, 0xE5);
     private static final Color VERDE_TEXTO = new Color(0x06, 0x5F, 0x46);
     private static final int ALTO_FILA = 44;
     
-    private final String nombreLocal;
-    
+    private final modelo.Color colorLocal;
+
     private EstadoJugador estadoLocal = EstadoJugador.ESPERANDO;
     private SolicitudInicioController cu5;
     private IniciarPartidaController cu3;
-    
-    public VentanaSalaEspera(String nombreLocal, boolean esAnfitrion) {
+
+    public VentanaSalaEspera(modelo.Color colorLocal, boolean esAnfitrion) {
         initComponents();
-        this.nombreLocal = nombreLocal;
-        
-        estilizarSecundario(btnListo);
+        this.colorLocal = colorLocal;
+
+        Estilos.secundario(btnListo);
+        Estilos.anchoCompleto(btnListo, ANCHO);
         btnListo.addActionListener(e -> {
             if (estadoLocal == EstadoJugador.LISTO) {
                 cu5.cancelarListo();
@@ -53,7 +51,8 @@ public class VentanaSalaEspera extends javax.swing.JFrame implements VistaSalaEs
             }
         });
         
-        estilizarPrimario(btnIniciar);
+        Estilos.primario(btnIniciar);
+        Estilos.anchoCompleto(btnIniciar, ANCHO);
         btnIniciar.addActionListener(e -> cu3.iniciarPartida());
         habilitarIniciar(false);
         
@@ -81,9 +80,9 @@ public class VentanaSalaEspera extends javax.swing.JFrame implements VistaSalaEs
     }
     
     @Override
-    public void mostrarJugadores(List<Jugador> jugadores) {
+    public void mostrarJugadores(List<JugadorVista> jugadores) {
         listaJugadores.removeAll();
-        for (Jugador j : jugadores) {
+        for (JugadorVista j : jugadores) {
             listaJugadores.add(fila(j));
         }
         listaJugadores.revalidate();
@@ -99,51 +98,23 @@ public class VentanaSalaEspera extends javax.swing.JFrame implements VistaSalaEs
     @Override
     public void habilitarIniciar(boolean habilitado) {
         btnIniciar.setEnabled(habilitado);
-        btnIniciar.setBackground(habilitado ? AZUL_OSCURO : GRIS_DESHAB);
+        btnIniciar.setBackground(habilitado ? Estilos.AZUL_OSCURO : GRIS_DESHAB);
     }
-    
+
     @Override
     public void mostrarModal(String titulo, String mensaje) {
-        JDialog d = new JDialog(this, titulo, true);
-        
-        JLabel lblTitulo = new JLabel(titulo);
-        lblTitulo.setFont(new Font("SansSerif", Font.BOLD, 14));
-        lblTitulo.setAlignmentX(LEFT_ALIGNMENT);
-        
-        JLabel lblMensaje = new JLabel("<html><body style='width:240px'>" + mensaje + "</body></html>");
-        lblMensaje.setAlignmentX(LEFT_ALIGNMENT);
-        
-        JButton aceptar = new JButton("Aceptar");
-        estilizarPrimario(aceptar);
-        aceptar.addActionListener(e -> d.dispose());
-        
-        JPanel p = new JPanel();
-        p.setLayout(new BoxLayout(p, BoxLayout.Y_AXIS));
-        p.setBackground(Color.WHITE);
-        p.setBorder(BorderFactory.createEmptyBorder(20, 24, 20, 24));
-        p.add(lblTitulo);
-        p.add(Box.createVerticalStrut(8));
-        p.add(lblMensaje);
-        p.add(Box.createVerticalStrut(16));
-        p.add(aceptar);
-        
-        d.setContentPane(p);
-        d.getRootPane().setDefaultButton(aceptar);
-        d.setResizable(false);
-        d.pack();
-        d.setLocationRelativeTo(this);
-        d.setVisible(true);
+        Estilos.mostrarModal(this, titulo, mensaje);
     }
-    
-    private JPanel fila(Jugador j) {
+
+    private JPanel fila(JugadorVista j) {
         JPanel fila = new JPanel(new BorderLayout());
         fila.setOpaque(false);
         fila.setAlignmentX(LEFT_ALIGNMENT);
         fila.setMaximumSize(new Dimension(Integer.MAX_VALUE, ALTO_FILA));
-        fila.setPreferredSize(new Dimension(340, ALTO_FILA));
-        fila.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, GRIS_BORDE));
-        
-        Color colorJugador = Paleta.awt(j.getColor());
+        fila.setPreferredSize(new Dimension(ANCHO, ALTO_FILA));
+        fila.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, Estilos.GRIS_BORDE));
+
+        Color colorJugador = Paleta.awt(j.color());
         JComponent punto = new JComponent() {
             @Override
             protected void paintComponent(Graphics g) {
@@ -156,8 +127,8 @@ public class VentanaSalaEspera extends javax.swing.JFrame implements VistaSalaEs
         };
         punto.setPreferredSize(new Dimension(14, 14));
         
-        boolean esLocal = j.getNombre().equals(nombreLocal);
-        JLabel nombre = new JLabel(j.getNombre() + (esLocal ? " (Tú)" : ""));
+        boolean esLocal = j.color() == colorLocal;
+        JLabel nombre = new JLabel(j.nombre() + (esLocal ? " (Tú)" : ""));
         nombre.setFont(new Font("SansSerif", esLocal ? Font.BOLD : Font.PLAIN, 13));
         
         JPanel izquierda = new JPanel(new FlowLayout(FlowLayout.LEFT, 8, 14));
@@ -165,7 +136,7 @@ public class VentanaSalaEspera extends javax.swing.JFrame implements VistaSalaEs
         izquierda.add(punto);
         izquierda.add(nombre);
         
-        boolean listo = j.getEstado() == EstadoJugador.LISTO;
+        boolean listo = j.estado() == EstadoJugador.LISTO;
         JLabel chip = new JLabel(listo ? "Listo" : "Esperando");
         chip.setOpaque(true);
         chip.setFont(new Font("SansSerif", Font.PLAIN, 11));
@@ -180,30 +151,6 @@ public class VentanaSalaEspera extends javax.swing.JFrame implements VistaSalaEs
         fila.add(izquierda, BorderLayout.WEST);
         fila.add(derecha, BorderLayout.EAST);
         return fila;
-    }
-    
-    private void estilizarPrimario(JButton b) {
-        base(b);
-        b.setBackground(AZUL_OSCURO);
-        b.setForeground(Color.WHITE);
-        b.setBorder(BorderFactory.createEmptyBorder());
-    }
-    
-    private void estilizarSecundario(JButton b) {
-        base(b);
-        b.setBackground(Color.WHITE);
-        b.setForeground(AZUL_OSCURO);
-        b.setBorder(BorderFactory.createLineBorder(AZUL_OSCURO, 1));
-    }
-    
-    private void base(JButton b) {
-        b.setAlignmentX(LEFT_ALIGNMENT);
-        b.setPreferredSize(new Dimension(340, 40));
-        b.setMaximumSize(new Dimension(Integer.MAX_VALUE, 40));
-        b.setFont(new Font("SansSerif", Font.BOLD, 13));
-        b.setFocusPainted(false);
-        b.setOpaque(true);
-        b.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
     }
     
     @SuppressWarnings("unchecked")

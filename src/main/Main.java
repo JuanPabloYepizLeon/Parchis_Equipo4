@@ -1,26 +1,19 @@
 package main;
 
-import comun.GestorRed;
-import comun.GestorRedLocal;
-import comun.Sesion;
+import cliente.SesionCliente;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import parchis.AppJugador;
+import servidor.ParchisServidor;
 
+/**
+ * Punto de entrada del programa: abre la aplicación del jugador.
+ */
 public class Main {
 
     public static void main(String[] args) throws Exception {
         UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
-
-        SwingUtilities.invokeLater(() -> {
-            Sesion sesionA = new Sesion();
-            Sesion sesionB = new Sesion();
-            Sesion sesionC = new Sesion();
-            GestorRed red = new GestorRedLocal(sesionA);
-
-            new AppJugador("Jugador 1", sesionA, red).iniciar();
-            new AppJugador("Jugador 2", sesionB, red).iniciar();
-            new AppJugador("Jugador 3", sesionC, red).iniciar();
-        });
+        String nombre = args.length > 0 ? args[0] : "Jugador";
+        SwingUtilities.invokeLater(() -> new AppJugador(nombre, new SesionCliente(new ParchisServidor())).iniciar());
     }
 }

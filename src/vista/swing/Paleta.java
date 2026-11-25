@@ -2,6 +2,9 @@ package vista.swing;
 
 import modelo.Color;
 
+/**
+ * Color de pantalla que corresponde a cada color de jugador.
+ */
 final class Paleta {
 
     private Paleta() {

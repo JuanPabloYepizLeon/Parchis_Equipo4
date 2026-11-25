@@ -1,18 +1,16 @@
 package vista.swing;
 
-import java.awt.Color;
-import javax.swing.BorderFactory;
-
+/**
+ * Ventana de inicio: crear partida o unirse a una.
+ */
 public class VentanaInicio extends javax.swing.JFrame {
-
-    private static final Color AZUL_OSCURO = new Color(0x2F, 0x34, 0x4A);
 
     public VentanaInicio(String titulo, Runnable alCrear, Runnable alUnirse) {
         initComponents();
         setTitle(titulo);
 
-        estilizarPrimario(btnCrear);
-        estilizarSecundario(btnUnirse);
+        Estilos.primario(btnCrear);
+        Estilos.secundario(btnUnirse);
 
         btnCrear.addActionListener(e -> alCrear.run());
         btnUnirse.addActionListener(e -> alUnirse.run());
@@ -24,22 +22,6 @@ public class VentanaInicio extends javax.swing.JFrame {
     public void mostrar() {
         setLocationRelativeTo(null);
         setVisible(true);
-    }
-
-    public void ocultar() {
-        setVisible(false);
-    }
-
-    private void estilizarPrimario(javax.swing.JButton b) {
-        b.setBackground(AZUL_OSCURO);
-        b.setForeground(Color.WHITE);
-        b.setBorder(BorderFactory.createEmptyBorder());
-    }
-
-    private void estilizarSecundario(javax.swing.JButton b) {
-        b.setBackground(Color.WHITE);
-        b.setForeground(AZUL_OSCURO);
-        b.setBorder(BorderFactory.createLineBorder(AZUL_OSCURO, 1));
     }
 
     @SuppressWarnings("unchecked")

@@ -2,7 +2,6 @@ package vista.swing;
 
 import controlador.RegistroController;
 import java.awt.BasicStroke;
-import java.awt.Component;
 import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Font;
@@ -16,18 +15,17 @@ import java.util.EnumMap;
 import java.util.Map;
 import java.util.Set;
 import javax.swing.BorderFactory;
-import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JOptionPane;
 import javax.swing.border.Border;
 import modelo.Color;
 import vista.VistaRegistro;
 
+/**
+ * Ventana para registrarse: nombre, color y avatar.
+ */
 public class VentanaRegistro extends javax.swing.JFrame implements VistaRegistro {
 
-    private static final java.awt.Color AZUL_OSCURO = new java.awt.Color(0x2F, 0x34, 0x4A);
-    private static final java.awt.Color ROJO_ERROR = new java.awt.Color(0xD3, 0x2F, 0x2F);
-    private static final java.awt.Color GRIS_BORDE = new java.awt.Color(0xCC, 0xCC, 0xCC);
     private static final java.awt.Color GRIS_AVATAR = new java.awt.Color(0xE5, 0xE7, 0xEB);
     private static final int NUM_AVATARES = 4;
 
@@ -44,10 +42,10 @@ public class VentanaRegistro extends javax.swing.JFrame implements VistaRegistro
         lblMsgColor.setText(" ");
         lblMsgAvatar.setText(" ");
 
-        bordeNombre(GRIS_BORDE);
+        bordeNombre(Estilos.GRIS_BORDE);
 
         for (Color c : Color.values()) {
-            Circulo circ = new Circulo(awt(c), null, () -> seleccionarColor(c));
+            Circulo circ = new Circulo(Paleta.awt(c), null, () -> seleccionarColor(c));
             circulosColor.put(c, circ);
             filaColores.add(circ);
         }
@@ -59,7 +57,8 @@ public class VentanaRegistro extends javax.swing.JFrame implements VistaRegistro
             filaAvatares.add(circ);
         }
 
-        estilizarBoton(btnConfirmar);
+        Estilos.primario(btnConfirmar);
+        Estilos.anchoCompleto(btnConfirmar, 300);
         btnConfirmar.addActionListener(e -> confirmar());
         getRootPane().setDefaultButton(btnConfirmar);
 
@@ -77,7 +76,7 @@ public class VentanaRegistro extends javax.swing.JFrame implements VistaRegistro
     }
 
     private void confirmar() {
-        bordeNombre(GRIS_BORDE);
+        bordeNombre(Estilos.GRIS_BORDE);
         lblErrorNombre.setText(" ");
         lblMsgColor.setText(" ");
         lblMsgAvatar.setText(" ");
@@ -111,7 +110,7 @@ public class VentanaRegistro extends javax.swing.JFrame implements VistaRegistro
     public void marcarCampoError(String campo, String mensaje) {
         switch (campo) {
             case "nombre" -> {
-                bordeNombre(ROJO_ERROR);
+                bordeNombre(Estilos.ROJO_ERROR);
                 lblErrorNombre.setText(mensaje);
             }
             case "color" ->
@@ -132,32 +131,6 @@ public class VentanaRegistro extends javax.swing.JFrame implements VistaRegistro
         Border b = BorderFactory.createCompoundBorder(
                 BorderFactory.createLineBorder(c), BorderFactory.createEmptyBorder(4, 8, 4, 8));
         txtNombre.setBorder(b);
-    }
-
-    private void estilizarBoton(JButton b) {
-        b.setAlignmentX(Component.LEFT_ALIGNMENT);
-        b.setMaximumSize(new Dimension(Integer.MAX_VALUE, 40));
-        b.setPreferredSize(new Dimension(300, 40));
-        b.setBackground(AZUL_OSCURO);
-        b.setForeground(java.awt.Color.WHITE);
-        b.setFont(new Font("SansSerif", Font.BOLD, 13));
-        b.setBorder(BorderFactory.createEmptyBorder());
-        b.setFocusPainted(false);
-        b.setOpaque(true);
-        b.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-    }
-
-    private static java.awt.Color awt(Color c) {
-        return switch (c) {
-            case ROJO ->
-                new java.awt.Color(0xD6, 0x33, 0x33);
-            case AZUL ->
-                new java.awt.Color(0x2F, 0x6B, 0xD6);
-            case AMARILLO ->
-                new java.awt.Color(0xE8, 0xC1, 0x2B);
-            case VERDE ->
-                new java.awt.Color(0x3F, 0xA7, 0x4F);
-        };
     }
 
     @SuppressWarnings("unchecked")
@@ -279,6 +252,7 @@ public class VentanaRegistro extends javax.swing.JFrame implements VistaRegistro
     private javax.swing.JPanel panel;
     private javax.swing.JTextField txtNombre;
     // End of variables declaration//GEN-END:variables
+    /** Círculo que se puede seleccionar; se usa para elegir color y avatar. */
     private static class Circulo extends JComponent {
 
         private final java.awt.Color relleno;
@@ -325,12 +299,12 @@ public class VentanaRegistro extends javax.swing.JFrame implements VistaRegistro
             g2.setColor(atenuado ? aclarar(relleno, 0.75f) : relleno);
             g2.fillOval(4, 4, 32, 32);
             if (seleccionado) {
-                g2.setColor(AZUL_OSCURO);
+                g2.setColor(Estilos.AZUL_OSCURO);
                 g2.setStroke(new BasicStroke(3));
                 g2.drawOval(2, 2, 36, 36);
             }
             if (texto != null) {
-                g2.setColor(AZUL_OSCURO);
+                g2.setColor(Estilos.AZUL_OSCURO);
                 g2.setFont(new Font("SansSerif", Font.BOLD, 13));
                 FontMetrics fm = g2.getFontMetrics();
                 g2.drawString(texto, (40 - fm.stringWidth(texto)) / 2, (40 + fm.getAscent() - fm.getDescent()) / 2);
