@@ -1,36 +1,27 @@
 package controlador;
 
-import comun.GestorRed;
-import comun.Sesion;
-import modelo.EstadoPartida;
-import modelo.Evento;
-import modelo.Partida;
-import vista.Navegador;
+import cliente.HiloUi;
+import cliente.SesionCliente;
 import vista.VistaSalaEspera;
 
+/**
+ * Controlador del caso de uso "Iniciar partida" (solo lo usa el anfitrión).
+ */
 public class IniciarPartidaController {
 
     private final VistaSalaEspera vista;
-    private final Navegador nav;
-    private final Sesion sesion;
-    private final GestorRed red;
+    private final SesionCliente sesion;
 
-    public IniciarPartidaController(VistaSalaEspera vista, Navegador nav, Sesion sesion, GestorRed red) {
+    public IniciarPartidaController(VistaSalaEspera vista, SesionCliente sesion) {
         this.vista = vista;
-        this.nav = nav;
         this.sesion = sesion;
-        this.red = red;
     }
 
     public void iniciarPartida() {
-        Partida partida = sesion.getPartida();
-        if (!sesion.esAnfitrion() || !partida.todosListos()) {
-            vista.mostrarModal("No se puede iniciar", "Un jugador dejó de estar listo o se desconectó. Revisa el estado e inténtalo de nuevo.");
-            return;
-        }
-        partida.elegirJugadorInicial();
-        partida.cambiarEstado(EstadoPartida.EN_JUEGO);
-        red.difundir(Evento.PARTIDA_INICIADA, partida);
-        nav.mostrarTablero();
+        sesion.remoto().iniciarPartida()
+                .exceptionallyAsync(ex -> {
+                    ErroresRed.aplicar(ex, (c, m) -> vista.mostrarModal("No se puede iniciar", m), vista::mostrarModal);
+                    return null;
+                }, HiloUi.EDT);
     }
 }

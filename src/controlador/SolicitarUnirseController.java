@@ -1,50 +1,49 @@
 package controlador;
 
-import comun.ErrorNegocioException;
-import comun.GestorRed;
-import comun.Sesion;
-import comun.ValidacionException;
-import modelo.Partida;
+import cliente.HiloUi;
+import cliente.SesionCliente;
 import vista.Navegador;
 import vista.VistaUnirse;
 
+/**
+ * Controlador del caso de uso "Unirse a partida": valida la dirección y el puerto y se conecta.
+ */
 public class SolicitarUnirseController {
 
     private final VistaUnirse vista;
     private final Navegador nav;
-    private final Sesion sesion;
-    private final GestorRed red;
+    private final SesionCliente sesion;
 
-    public SolicitarUnirseController(VistaUnirse vista, Navegador nav, Sesion sesion, GestorRed red) {
+    public SolicitarUnirseController(VistaUnirse vista, Navegador nav, SesionCliente sesion) {
         this.vista = vista;
         this.nav = nav;
         this.sesion = sesion;
-        this.red = red;
     }
 
     public void solicitarUnirse(String txtDireccion, String txtPuerto) {
-        try {
-            if (txtDireccion.isBlank()) {
-                throw new ValidacionException("direccion", "La dirección del servidor no puede estar vacía");
-            }
-            if (txtPuerto.isBlank()) {
-                throw new ValidacionException("puerto", "El puerto no puede estar vacío");
-            }
-
-            int puerto;
-            try {
-                puerto = Integer.parseInt(txtPuerto.trim());
-            } catch (NumberFormatException e) {
-                throw new ErrorNegocioException("No se pudo unirse", "El puerto no es válido.");
-            }
-
-            Partida partida = red.solicitarAcceso(txtDireccion.trim(), puerto);
-            sesion.setPartida(partida, false);
-            nav.mostrarRegistroJugador();
-        } catch (ValidacionException e) {
-            vista.marcarCampoError(e.campo, e.getMessage());
-        } catch (ErrorNegocioException e) {
-            vista.mostrarModal("No se pudo unirse", "No fue posible conectar con el servidor o la partida ya está llena.");
+        if (txtDireccion.isBlank()) {
+            vista.marcarCampoError("direccion", "La dirección del servidor no puede estar vacía");
+            return;
         }
+        if (txtPuerto.isBlank()) {
+            vista.marcarCampoError("puerto", "El puerto no puede estar vacío");
+            return;
+        }
+        final int puerto;
+        try {
+            puerto = Integer.parseInt(txtPuerto.trim());
+        } catch (NumberFormatException e) {
+            vista.mostrarModal("No se pudo unirse", "El puerto no es válido.");
+            return;
+        }
+
+        sesion.unirse(txtDireccion.trim(), puerto)
+                .thenRunAsync(nav::mostrarRegistroJugador, HiloUi.EDT)
+                .exceptionallyAsync(ex -> {
+                    sesion.cerrar();
+                    vista.mostrarModal("No se pudo unirse",
+                            "No fue posible conectar con el servidor o la partida ya está llena.");
+                    return null;
+                }, HiloUi.EDT);
     }
 }
