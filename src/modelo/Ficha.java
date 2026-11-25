@@ -1,5 +1,8 @@
 package modelo;
 
+/**
+ * Ficha de un jugador y su posición en el recorrido.
+ */
 public class Ficha {
 
     private final int id;

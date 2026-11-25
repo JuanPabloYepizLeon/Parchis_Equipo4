@@ -1,5 +1,8 @@
 package modelo;
 
+/**
+ * Cambios de la partida que se avisan a los observadores (dado lanzado, ficha movida, etc.).
+ */
 public enum Evento {
     JUGADOR_REGISTRADO,
     ESTADO_JUGADOR_CAMBIADO,
@@ -10,5 +13,6 @@ public enum Evento {
     FICHA_EN_META,
     TURNO_PERDIDO,
     TURNO_CAMBIADO,
-    PARTIDA_TERMINADA
+    PARTIDA_TERMINADA,
+    JUGADOR_ABANDONO
 }

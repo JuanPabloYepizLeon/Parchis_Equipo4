@@ -2,7 +2,10 @@ package modelo;
 
 import java.util.List;
 
-public interface ServicioReglas {
+/**
+ * Reglas del juego: deciden qué movimientos son válidos y qué pasa al mover una ficha.
+ */
+public interface ReglasJuego {
 
     String motivoInvalido(Ficha ficha, int pasos, Tablero tablero);
 

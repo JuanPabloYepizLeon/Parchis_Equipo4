@@ -3,22 +3,15 @@ package modelo;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ReglasEstandar implements ServicioReglas {
+/**
+ * Reglas normales del Parchís: salir con 5, barreras, capturas, bonos y llegar exacto a la meta.
+ */
+public class ReglasEstandar implements ReglasJuego {
 
     public static final int PASOS_PARA_SALIR = 5;
     public static final int MAX_SEIS_CONSECUTIVOS = 3;
     public static final int BONO_CAPTURA = 20;
     public static final int BONO_META = 10;
-
-    private final boolean salidaObligatoria;
-
-    public ReglasEstandar() {
-        this(false);
-    }
-
-    public ReglasEstandar(boolean salidaObligatoria) {
-        this.salidaObligatoria = salidaObligatoria;
-    }
 
     @Override
     public String motivoInvalido(Ficha f, int pasos, Tablero t) {
@@ -101,12 +94,6 @@ public class ReglasEstandar implements ServicioReglas {
         for (Ficha f : jugador.getFichas()) {
             if (esMovimientoValido(f, pasos, t)) {
                 movibles.add(f);
-            }
-        }
-        if (salidaObligatoria && pasos == PASOS_PARA_SALIR) {
-            List<Ficha> salidas = movibles.stream().filter(f -> f.getEstado() == EstadoFicha.EN_BASE).toList();
-            if (!salidas.isEmpty()) {
-                return new ArrayList<>(salidas);
             }
         }
         return movibles;

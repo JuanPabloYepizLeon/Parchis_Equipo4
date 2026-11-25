@@ -1,5 +1,8 @@
 package modelo;
 
+/**
+ * Casilla del tablero. Puede ser normal o segura.
+ */
 public abstract class Casilla {
 
     private final int numero;

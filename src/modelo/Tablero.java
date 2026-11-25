@@ -6,6 +6,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+/**
+ * Tablero de 68 casillas. Sabe dónde está cada ficha y si hay barreras.
+ */
 public class Tablero {
 
     public static final int TOTAL_CASILLAS = 68;
@@ -20,7 +23,7 @@ public class Tablero {
             comunes.add(crearCasilla(n));
         }
         for (Color c : Color.values()) {
-            recorridos.put(c, new Recorrido(c, comunes));
+            recorridos.put(c, new Recorrido(c));
         }
     }
 
@@ -35,6 +38,10 @@ public class Tablero {
 
     public void registrarFichas(List<Ficha> nuevas) {
         fichas.addAll(nuevas);
+    }
+
+    public void retirarFichas(List<Ficha> retiradas) {
+        fichas.removeAll(retiradas);
     }
 
     public Casilla casilla(int absoluta) {
@@ -70,19 +77,5 @@ public class Tablero {
 
     public List<Ficha> getFichas() {
         return List.copyOf(fichas);
-    }
-
-    public String describirPosicion(Color color, int rel) {
-        if (rel == Recorrido.BASE) {
-            return "base";
-        }
-        if (rel <= Recorrido.ULTIMA_COMUN) {
-            int abs = recorridos.get(color).aAbsoluta(rel);
-            return "casilla " + abs + (casilla(abs).esSegura() ? " (segura)" : "");
-        }
-        if (rel < Recorrido.META) {
-            return "pasillo " + (rel - Recorrido.INICIO_PASILLO + 1) + "/7";
-        }
-        return "META";
     }
 }
